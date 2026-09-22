@@ -1,6 +1,6 @@
 import copy
 
-import pytest
+import pytest  # pyright: ignore[reportMissingImports]
 from fastapi.testclient import TestClient
 
 from src.app import activities, app
