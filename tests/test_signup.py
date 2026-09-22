@@ -41,3 +41,10 @@ def test_signup_rejects_full_activity(client):
 
     assert response.status_code == 400
     assert response.json()["detail"] == "Activity is full"
+
+
+def test_signup_missing_activity_returns_404(client):
+    response = client.post("/activities/Unknown Club/signup?email=student@mergington.edu")
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Activity not found"
