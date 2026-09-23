@@ -1,12 +1,12 @@
 import copy
 
-import pytest  # pyright: ignore[reportMissingImports]
+from pytest import fixture  # pyright: ignore[reportMissingImports]
 from fastapi.testclient import TestClient
 
 from src.app import activities, app
 
 
-@pytest.fixture
+@fixture
 def client():
     original = copy.deepcopy(activities)
     with TestClient(app) as test_client:
