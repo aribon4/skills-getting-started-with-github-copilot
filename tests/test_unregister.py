@@ -1,18 +1,4 @@
-import copy
-
-import pytest
-from fastapi.testclient import TestClient
-
-from src.app import activities, app
-
-
-@pytest.fixture
-def client():
-    original = copy.deepcopy(activities)
-    with TestClient(app) as test_client:
-        yield test_client
-    activities.clear()
-    activities.update(original)
+from src.app import activities
 
 
 def test_unregister_participant_removes_email(client):
@@ -28,3 +14,10 @@ def test_unregister_missing_participant_returns_404(client):
 
     assert response.status_code == 404
     assert response.json()["detail"] == "Participant not found in activity"
+
+
+def test_unregister_missing_activity_returns_404(client):
+    response = client.delete("/activities/Unknown Club/participants/michael@mergington.edu")
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Activity not found"

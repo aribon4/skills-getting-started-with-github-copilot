@@ -1,18 +1,4 @@
-import copy
-
-import pytest
-from fastapi.testclient import TestClient
-
-from src.app import activities, app
-
-
-@pytest.fixture
-def client():
-    original = copy.deepcopy(activities)
-    with TestClient(app) as test_client:
-        yield test_client
-    activities.clear()
-    activities.update(original)
+from src.app import activities
 
 
 def test_signup_adds_new_participant(client):
@@ -41,3 +27,10 @@ def test_signup_rejects_full_activity(client):
 
     assert response.status_code == 400
     assert response.json()["detail"] == "Activity is full"
+
+
+def test_signup_missing_activity_returns_404(client):
+    response = client.post("/activities/Unknown Club/signup?email=student@mergington.edu")
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Activity not found"
