@@ -1,18 +1,4 @@
-import copy
-
-import pytest # pyright: ignore[reportMissingImports]
-from fastapi.testclient import TestClient
-
-from src.app import activities, app
-
-
-@pytest.fixture
-def client():
-    original = copy.deepcopy(activities)
-    with TestClient(app) as test_client:
-        yield test_client
-    activities.clear()
-    activities.update(original)
+from src.app import activities
 
 
 def test_unregister_participant_removes_email(client):

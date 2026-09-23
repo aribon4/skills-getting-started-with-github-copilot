@@ -1,18 +1,4 @@
-import copy
-
-from pytest import fixture  # pyright: ignore[reportMissingImports]
-from fastapi.testclient import TestClient
-
-from src.app import activities, app
-
-
-@fixture
-def client():
-    original = copy.deepcopy(activities)
-    with TestClient(app) as test_client:
-        yield test_client
-    activities.clear()
-    activities.update(original)
+from src.app import activities
 
 
 def test_signup_adds_new_participant(client):
